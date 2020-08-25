@@ -1,11 +1,16 @@
-import { TestBed, async } from '@angular/core/testing';
+import { TestBed, async, ComponentFixture } from '@angular/core/testing';
 import { AppComponent } from './app.component';
+import { DocumentComponent } from './document/document.component';
+import { ToolbarComponent } from './toolbar/toolbar.component';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [],
       declarations: [
-        AppComponent
+        AppComponent,
+        DocumentComponent,
+        ToolbarComponent
       ],
     }).compileComponents();
   }));
@@ -16,16 +21,15 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'renderFindReplace'`, () => {
+  it('should contain the document component', () => {
     const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('renderFindReplace');
+    const documentComponent = fixture.nativeElement.querySelector('[data-test="documentComponent"]');
+    expect(documentComponent).toBeTruthy();
   });
 
-  it('should render title', () => {
+  it('should contain the toolbar component', () => {
     const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('renderFindReplace app is running!');
+    const toolbarComponent = fixture.nativeElement.querySelector('[data-test="toolbarComponent"]');
+    expect(toolbarComponent).toBeTruthy();
   });
 });

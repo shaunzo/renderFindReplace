@@ -20,7 +20,7 @@ export class DocumentComponent implements OnInit {
 
   getDocument() {
     this.documentService.getDocument$().subscribe((res: any) => {
-      this.document = res.default.content;
+      this.document = res.content;
       console.log(this.document);
     });
   }

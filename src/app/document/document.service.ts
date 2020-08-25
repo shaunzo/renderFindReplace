@@ -1,19 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import * as documentData from '../../data/Q1-sample-text.json';
-
-
-const localUrl = 'server/public_html/documents/Q1-sample-text.json';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DocumentService {
 
-  constructor( private http: HttpClient) { }
+  constructor(private httpClient: HttpClient) {}
 
   getDocument$() {
-    return of(documentData);
+    return this.httpClient.get('assets/data/Q1-sample-text.json');
   }
 }

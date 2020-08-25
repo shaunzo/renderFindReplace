@@ -1,3 +1,5 @@
+
+// Text Utility Helper Classes
 .primary-font-family {
   font-family: 'Times New Roman', Times, serif;
 }
@@ -8,4 +10,16 @@
 
 .font-italic {
   font-style: italic;
+}
+
+.text-line-through {
+  text-decoration: line-through;
+}
+
+.text-underline {
+  text-decoration: underline;
+}
+
+.text-decoration-solid {
+  text-decoration-style: solid;
 }

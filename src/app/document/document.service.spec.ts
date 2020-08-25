@@ -1,8 +1,8 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed, fakeAsync, tick } from '@angular/core/testing';
 
 import { DocumentService } from './document.service';
 
-describe('DocumentService', () => {
+fdescribe('DocumentService', () => {
   let service: DocumentService;
 
   beforeEach(() => {

@@ -6,11 +6,13 @@ import { AppComponent } from './app.component';
 import { DocumentComponent } from './document/document.component';
 
 import { DocumentService } from './document/document.service';
+import { ToolbarComponent } from './toolbar/toolbar.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    DocumentComponent
+    DocumentComponent,
+    ToolbarComponent
   ],
   imports: [
     BrowserModule,
