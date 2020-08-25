@@ -1,16 +1,22 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
+import { DocumentComponent } from './document/document.component';
+
+import { DocumentService } from './document/document.service';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    DocumentComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [ DocumentService ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

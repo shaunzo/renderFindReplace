@@ -1,0 +1,15 @@
+<ng-container *ngIf="!document">
+  <p>Sorry there was a problem loading this document</p>
+</ng-container>
+
+<ng-container *ngFor="let contentObj of document">
+  <p *ngIf="contentObj.type === 'paragraph'">
+    <ng-container *ngFor="let content of contentObj.content">
+        <span *ngIf="content.type === 'span'">
+          <ng-container *ngFor="let item of content.content">
+            {{ item.text }}
+          </ng-container>
+        </span>
+    </ng-container>
+  </p>
+</ng-container>
