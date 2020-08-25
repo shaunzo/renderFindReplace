@@ -5,11 +5,14 @@
 <ng-container *ngFor="let contentObj of document">
   <p *ngIf="contentObj.type === 'paragraph'">
     <ng-container *ngFor="let content of contentObj.content">
-        <span *ngIf="content.type === 'span'">
+      <ng-container *ngIf="content.type === 'span'">
+        <span
+          [ngClass]="{'font-bold': content.attrs.bold, 'font-italic': content.attrs.italic}">
           <ng-container *ngFor="let item of content.content">
             {{ item.text }}
           </ng-container>
         </span>
+      </ng-container>
     </ng-container>
   </p>
 </ng-container>
