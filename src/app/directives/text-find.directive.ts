@@ -2,16 +2,19 @@ import {
   Directive,
   ElementRef,
   OnInit,
+  OnDestroy,
   Renderer2,
 } from '@angular/core';
 import { TextFindService } from '../services/text-find.service';
+import { Subscription } from 'rxjs';
 
 @Directive({
   selector: '[appTextFind]',
 })
-export class TextFindDirective implements OnInit {
+export class TextFindDirective implements OnInit, OnDestroy {
 
-  nativeElement: any;
+  subscriptionFindString = new Subscription();
+  subscriptionFormReset = new Subscription();
 
   constructor(
     private elementRef: ElementRef,
@@ -20,14 +23,17 @@ export class TextFindDirective implements OnInit {
 
   ngOnInit() {
 
-    this.nativeElement = this.setInitialHTML();
-
-    this.textFindService.findString.subscribe(stringFind => {
+    this.subscriptionFindString = this.textFindService.findString$.subscribe(stringFind => {
       this.reset();
-
       if (stringFind && stringFind !== '') {
         this.addHighlight(stringFind);
       } else {
+        this.reset();
+      }
+    });
+
+    this.subscriptionFormReset = this.textFindService.formReset$.subscribe( resetForm => {
+      if (resetForm) {
         this.reset();
       }
     });
@@ -42,13 +48,13 @@ export class TextFindDirective implements OnInit {
         }
       ));
 
-    this.textFindService.resultsCount += 1;
-
-    console.log(this.textFindService.resultsCount);
+    this.textFindService.resultsCount = this.getResultsCount();
+    this.textFindService.resultCountUpdated$.next(this.textFindService.resultsCount);
   }
 
   reset() {
-    this.textFindService.resultsCount = 0;
+    this.textFindService.resultsCount = null;
+    this.textFindService.resultCountUpdated$.next(null);
     this.renderer.setProperty(
       this.elementRef.nativeElement, 'innerHTML', this.elementRef.nativeElement.innerHTML.replace(
         new RegExp(`<span class="highlightText">|</span>`, 'g'), match => {
@@ -57,8 +63,19 @@ export class TextFindDirective implements OnInit {
     ));
   }
 
-  setInitialHTML() {
-    return this.elementRef.nativeElement;
+  getResultsCount() {
+    const count = this.renderer.selectRootElement('app-root', true).querySelectorAll('.highlightText').length;
+    if (count > 0) {
+      return count;
+    } else {
+      this.reset();
+      return null;
+    }
+  }
+
+  ngOnDestroy() {
+    this.subscriptionFindString.unsubscribe();
+    this.subscriptionFormReset.unsubscribe();
   }
 
 }

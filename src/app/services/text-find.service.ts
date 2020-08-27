@@ -6,8 +6,11 @@ import { Subject } from 'rxjs';
 })
 export class TextFindService {
 
-  findString = new Subject<string>();
+  findString$ = new Subject<string>();
   resultsCount: number;
+  resultIndexes$ = new Subject<any[]>();
+  resultCountUpdated$ = new Subject<number>();
+  formReset$ = new Subject<boolean>();
 
   constructor() { }
 }

@@ -1,16 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { TextFindService } from '../services/text-find.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-toolbar',
   templateUrl: './toolbar.component.html',
   styleUrls: ['./toolbar.component.scss']
 })
-export class ToolbarComponent implements OnInit {
+export class ToolbarComponent implements OnInit, OnDestroy {
+
+  subscriptionCountUpdated = new Subscription();
 
   findReplaceForm: FormGroup;
-
   matchesFound: number;
   findString: string;
 
@@ -22,20 +24,22 @@ export class ToolbarComponent implements OnInit {
       replace: new FormControl(null)
     });
 
-    this.matchesFound = this.textFindService.resultsCount;
-
-    console.log(this.matchesFound);
+    this.subscriptionCountUpdated = this.textFindService.resultCountUpdated$.subscribe(count => this.matchesFound = count );
   }
 
   findText() {
-    this.textFindService.findString.next(this.findReplaceForm.value.find);
+    this.textFindService.findString$.next(this.findReplaceForm.value.find);
     this.matchesFound = this.textFindService.resultsCount;
-
-    console.log(this.matchesFound);
   }
 
   replaceText() {
     console.log(this.findReplaceForm);
+    this.findReplaceForm.reset();
+    this.textFindService.formReset$.next(true);
+  }
+
+  ngOnDestroy() {
+    this.subscriptionCountUpdated.unsubscribe();
   }
 
 }

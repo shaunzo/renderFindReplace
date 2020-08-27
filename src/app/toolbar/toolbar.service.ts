@@ -6,7 +6,7 @@ import { Subject } from 'rxjs';
 })
 export class ToolbarService {
 
-  findString = new Subject<string>();
+  findString$ = new Subject<string>();
 
   constructor() { }
 }
