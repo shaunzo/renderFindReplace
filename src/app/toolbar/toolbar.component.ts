@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-import { ToolbarService } from './toolbar.service';
+import { TextFindService } from '../services/text-find.service';
 
 @Component({
   selector: 'app-toolbar',
@@ -14,17 +14,24 @@ export class ToolbarComponent implements OnInit {
   matchesFound: number;
   findString: string;
 
-  constructor( private toolbarService: ToolbarService) { }
+  constructor(private textFindService: TextFindService) { }
 
   ngOnInit(): void {
     this.findReplaceForm = new FormGroup({
       find : new FormControl(null),
       replace: new FormControl(null)
     });
+
+    this.matchesFound = this.textFindService.resultsCount;
+
+    console.log(this.matchesFound);
   }
 
   findText() {
-    this.toolbarService.findString.next(this.findReplaceForm.value.find);
+    this.textFindService.findString.next(this.findReplaceForm.value.find);
+    this.matchesFound = this.textFindService.resultsCount;
+
+    console.log(this.matchesFound);
   }
 
   replaceText() {

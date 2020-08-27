@@ -2,11 +2,7 @@
   <p>Sorry there was a problem loading this document</p>
 </ng-container>
 
-
-
   <ng-container *ngFor="let contentObj of document">
-
-    <!-- {{ document | json }} -->
     <p *ngIf="contentObj.type === 'paragraph'">
       <ng-container *ngFor="let content of contentObj.content">
         <ng-container *ngIf="content.type === 'span'">
@@ -18,15 +14,10 @@
             'text-underline': content.attrs.textCSS && content.attrs.textCSS.textDecoration && content.attrs.textCSS.textDecoration === 'underline' || false,
             'text-decoration-solid': content.attrs.textCSS && content.attrs.textCSS.textdecorationStyle && content.attrs.textCSS.textDecorationStyle === 'solid' || false }">
             <ng-container *ngFor="let item of content.content">
-              <span appTextHighlight>{{ item.text }}</span>
+              <span appTextFind>{{ item.text }}</span>
             </ng-container>
           </span>
         </ng-container>
       </ng-container>
     </p>
   </ng-container>
-
-
-<!-- <div [innerHTML]="highlightText()">
-
-</div> -->

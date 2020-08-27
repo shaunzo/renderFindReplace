@@ -5,7 +5,14 @@
 <div class="findReplaceForm">
     <form [formGroup]="findReplaceForm" (ngSubmit)="replaceText()">
       <input type="text" id="find" formControlName="find" (input)="findText()" placeholder="Enter text to find" class="toolbar-find">
-      <span>replace with</span>
+      <span>replace</span>
+
+      <ng-container *ngIf = matchesFound >
+        &nbsp;<span class="toolbar-matches"><strong>{{matchesFound}} result(s)</strong></span>
+      </ng-container>
+
+      &nbsp;<span>with</span>
+
       <input type="text" id="replace" formControlName="replace" placeholder="Enter text to replace" class="toolbar-replace">
       <button type="submit">Replace</button>
     </form>

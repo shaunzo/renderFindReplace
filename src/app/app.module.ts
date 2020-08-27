@@ -5,18 +5,17 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { DocumentComponent } from './document/document.component';
-
 import { DocumentService } from './document/document.service';
 import { ToolbarService } from './toolbar/toolbar.service';
 import { ToolbarComponent } from './toolbar/toolbar.component';
-import { TextHighlightDirective } from './document/textFind.directive';
+import { TextFindDirective } from './directives/text-find.directive';
 
 @NgModule({
   declarations: [
     AppComponent,
     DocumentComponent,
     ToolbarComponent,
-    TextHighlightDirective
+    TextFindDirective
   ],
   imports: [
     BrowserModule,
@@ -27,6 +26,7 @@ import { TextHighlightDirective } from './document/textFind.directive';
     DocumentService,
     ToolbarService
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  exports: [TextFindDirective]
 })
 export class AppModule { }
