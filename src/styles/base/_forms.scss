@@ -1,0 +1,24 @@
+input {
+  border-color: $gray;
+  border-style: solid;
+  border-width: 1px;
+  height: 40px;
+
+  &:active,
+  &:focus {
+    outline: none;
+  }
+}
+
+button {
+  height: 40px;
+  text-transform: uppercase;
+  background-color: $primary;
+  border: none;
+  color: #fff;
+
+  &:active,
+  &:focus {
+    outline: none;
+  }
+}

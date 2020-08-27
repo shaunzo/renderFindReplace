@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DocumentService } from './document.service';
-import { Observable } from 'rxjs';
+import { ToolbarService } from '../toolbar/toolbar.service';
 import { IDocument } from './document';
 
 @Component({
@@ -10,19 +10,22 @@ import { IDocument } from './document';
 })
 export class DocumentComponent implements OnInit {
   document: IDocument;
+  findString: string;
 
-  constructor( private documentService: DocumentService) { }
+  constructor( private documentService: DocumentService, private toolbarService: ToolbarService) { }
 
   ngOnInit(): void {
 
     this.getDocument();
+
+    this.toolbarService.findString.subscribe( stringToFind => {
+      this.findString = stringToFind;
+    });
   }
 
   getDocument() {
     this.documentService.getDocument$().subscribe((res: any) => {
       this.document = res.content;
-      console.log(this.document);
     });
   }
-
 }

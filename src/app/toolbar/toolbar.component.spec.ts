@@ -22,4 +22,15 @@ describe('ToolbarComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  // should emit the string of text to find in document
+
+  // should emit the value to replace in document
+
+  // replace field should be diabled until a "Find" input is made
+
+  // replace button should be diabled unless a replace input string is entered
+
+  // should receive the amount of matches received and display it
+
 });

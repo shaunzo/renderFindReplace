@@ -1,1 +1,12 @@
-<p>toolbar works!</p>
+<div class="logo"></div>
+
+<div class="fill-space"></div>
+
+<div class="findReplaceForm">
+    <form [formGroup]="findReplaceForm" (ngSubmit)="replaceText()">
+      <input type="text" id="find" formControlName="find" (input)="findText()" placeholder="Enter text to find" class="toolbar-find">
+      <span>replace with</span>
+      <input type="text" id="replace" formControlName="replace" placeholder="Enter text to replace" class="toolbar-replace">
+      <button type="submit">Replace</button>
+    </form>
+</div>

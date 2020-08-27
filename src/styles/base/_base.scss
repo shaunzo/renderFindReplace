@@ -1,5 +1,9 @@
+@import '../theme/variables';
 @import './typography';
+@import './forms';
 
 html, body {
-  background-color: #F8F9FA;
+  background-color: $offwhite;
+  padding: 0;
+  margin: 0;
 }
