@@ -1,23 +1,19 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-import { TextFindService } from '../services/text-find.service';
-import { Subscription } from 'rxjs';
-import { IUpdateText } from '../interfaces/update-text';
+import { ToolbarService } from './toolbar.service';
 
 @Component({
   selector: 'app-toolbar',
   templateUrl: './toolbar.component.html',
   styleUrls: ['./toolbar.component.scss']
 })
-export class ToolbarComponent implements OnInit, OnDestroy {
-
-  subscriptionCountUpdated = new Subscription();
+export class ToolbarComponent implements OnInit {
 
   findReplaceForm: FormGroup;
   matchesFound: number;
   findString: string;
 
-  constructor(private textFindService: TextFindService) { }
+  constructor(private toolbarService: ToolbarService) { }
 
   ngOnInit(): void {
     this.findReplaceForm = new FormGroup({
@@ -25,39 +21,14 @@ export class ToolbarComponent implements OnInit, OnDestroy {
       replace: new FormControl(null)
     });
 
-    this.subscriptionCountUpdated = this.textFindService.resultCountUpdated$.subscribe(count => this.matchesFound = count );
+    this.matchesFound = this.toolbarService.matchesFound;
   }
 
-  findText() {
-    this.textFindService.findString$.next(this.findReplaceForm.value.find);
-    this.matchesFound = this.textFindService.resultsCount;
+  findText(text: string) {
+    this.toolbarService.findText(text);
   }
 
-  replaceText() {
-    const arr: IUpdateText[] = [];
-
-    if (this.textFindService.resultIndexes.length > 0) {
-      this.textFindService.resultIndexes.forEach(item => {
-
-        const updateItem: IUpdateText = {
-           pIndex: item[0],
-           spanIndex: item[1],
-           contentIndex: item[2],
-           textMatch: this.findReplaceForm.value.find,
-           textReplace: this.findReplaceForm.value.replace
-         };
-
-        arr.push(updateItem);
-      });
-    }
-
-    this.textFindService.replaceText$.next(arr);
-    this.findReplaceForm.reset();
-    this.textFindService.formReset$.next(true);
+  replaceText(find: string, replace: string, formGroup: FormGroup) {
+   this.toolbarService.replaceText(find, replace, formGroup);
   }
-
-  ngOnDestroy() {
-    this.subscriptionCountUpdated.unsubscribe();
-  }
-
 }

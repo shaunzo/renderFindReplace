@@ -3,8 +3,8 @@
 <div class="fill-space"></div>
 
 <div class="findReplaceForm">
-    <form [formGroup]="findReplaceForm" (ngSubmit)="replaceText()">
-      <input type="text" id="find" formControlName="find" (input)="findText()" placeholder="Enter text to find" class="toolbar-find">
+    <form [formGroup]="findReplaceForm" (ngSubmit)="replaceText(findReplaceForm.value.find, findReplaceForm.value.replace, findReplaceForm)">
+      <input type="text" id="find" formControlName="find" (input)="findText(findReplaceForm.value.find)" placeholder="Enter text to find" class="toolbar-find">
       <span>replace</span>
 
       <ng-container *ngIf = matchesFound >
