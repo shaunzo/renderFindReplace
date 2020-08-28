@@ -12,11 +12,21 @@ export class ToolbarService implements OnDestroy {
 
   subscriptionCountUpdated = new Subscription();
   matchesFound: number;
+  matchesCountUpdated$ = new Subject<number>();
   findString$ = new Subject<string>();
+  currentSelectionAll = this.textFindService.matchedIds;
 
   constructor( private textFindService: TextFindService) {
     this.subscriptionCountUpdated = this.textFindService.resultCountUpdated$.subscribe(
-      count => this.matchesFound = count );
+      count => {
+
+        if (count) {
+          this.matchesFound = count;
+          this.matchesCountUpdated$.next(count);
+        } else {
+          this.matchesCountUpdated$.next(0);
+        }
+      });
   }
 
   findText(text: string) {
@@ -24,7 +34,7 @@ export class ToolbarService implements OnDestroy {
     this.matchesFound = this.textFindService.resultsCount;
   }
 
-  replaceText(find: string, replace: string, formGroup: FormGroup) {
+  replaceAllText(find: string, replace: string, formGroup: FormGroup) {
     const arr: IUpdateText[] = [];
 
     if (this.textFindService.resultIndexes.length > 0) {

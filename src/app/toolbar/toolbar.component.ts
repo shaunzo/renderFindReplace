@@ -1,21 +1,30 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { ToolbarService } from './toolbar.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-toolbar',
   templateUrl: './toolbar.component.html',
   styleUrls: ['./toolbar.component.scss']
 })
-export class ToolbarComponent implements OnInit {
+export class ToolbarComponent implements OnInit, OnDestroy {
 
+  subscriptionMatchesCount = new Subscription();
   findReplaceForm: FormGroup;
   matchesFound: number;
   findString: string;
+  selectionIncrement = 1;
 
   constructor(private toolbarService: ToolbarService) { }
 
   ngOnInit(): void {
+
+    this.subscriptionMatchesCount = this.toolbarService.matchesCountUpdated$.subscribe(count => {
+      this.matchesFound = count;
+      this.selectionIncrement = 1;
+    });
+
     this.findReplaceForm = new FormGroup({
       find : new FormControl(null),
       replace: new FormControl(null)
@@ -28,7 +37,28 @@ export class ToolbarComponent implements OnInit {
     this.toolbarService.findText(text);
   }
 
-  replaceText(find: string, replace: string, formGroup: FormGroup) {
-   this.toolbarService.replaceText(find, replace, formGroup);
+  selectMatchNext() {
+    if (this.selectionIncrement < this.matchesFound) {
+      this.selectionIncrement++;
+    } else {
+      return;
+    }
   }
+
+  selectMatchPrev() {
+    if (this.selectionIncrement > 1) {
+      this.selectionIncrement--;
+    } else {
+      return;
+    }
+  }
+
+  replaceAllText(find: string, replace: string, formGroup: FormGroup) {
+   this.toolbarService.replaceAllText(find, replace, formGroup);
+  }
+
+  ngOnDestroy() {
+    this.subscriptionMatchesCount.unsubscribe();
+  }
+
 }
