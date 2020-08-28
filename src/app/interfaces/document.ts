@@ -1,11 +1,12 @@
 export interface IDocument {
-  content: IContent[];
+  content?: IContent[];
+  type?: string;
 }
 
 export interface IContent {
   type: string;
   attrs?: IAttr;
-  content: {
+  content?: {
     type: string;
     attrs: IAttr;
     content: {

@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { TextFindService } from '../services/text-find.service';
 import { Subscription } from 'rxjs';
+import { IUpdateText } from '../interfaces/update-text';
 
 @Component({
   selector: 'app-toolbar',
@@ -33,7 +34,24 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   }
 
   replaceText() {
-    console.log(this.findReplaceForm);
+    const arr: IUpdateText[] = [];
+
+    if (this.textFindService.resultIndexes.length > 0) {
+      this.textFindService.resultIndexes.forEach(item => {
+
+        const updateItem: IUpdateText = {
+           pIndex: item[0],
+           spanIndex: item[1],
+           contentIndex: item[2],
+           textMatch: this.findReplaceForm.value.find,
+           textReplace: this.findReplaceForm.value.replace
+         };
+
+        arr.push(updateItem);
+      });
+    }
+
+    this.textFindService.replaceText$.next(arr);
     this.findReplaceForm.reset();
     this.textFindService.formReset$.next(true);
   }
