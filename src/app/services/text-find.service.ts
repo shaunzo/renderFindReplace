@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { IUpdateText } from '../interfaces/update-text';
 
 @Injectable({
@@ -15,6 +15,8 @@ export class TextFindService {
   resultIndexes$ = new Subject<any[]>();
   resultCountUpdated$ = new Subject<number>();
   formReset$ = new Subject<boolean>();
+  selectMatchInstance$ = new Subject<number>();
 
-  constructor() { }
+  constructor() {
+  }
 }

@@ -1,3 +1,9 @@
 .highlightText {
   background: $highlight;
+
+  &.selected {
+    color: #fff;
+    font-weight: bold;
+    background: $primary
+  }
 }

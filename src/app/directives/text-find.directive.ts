@@ -16,6 +16,7 @@ export class TextFindDirective implements OnInit, OnDestroy {
   matchedIndexes = [];
   subscriptionFindString = new Subscription();
   subscriptionFormReset = new Subscription();
+  subscriptionSelectInstance = new Subscription();
 
   constructor(
     private elementRef: ElementRef,
@@ -23,8 +24,6 @@ export class TextFindDirective implements OnInit, OnDestroy {
     private textFindService: TextFindService) {}
 
   ngOnInit() {
-
-
     this.subscriptionFindString = this.textFindService.findString$.subscribe(stringFind => {
       this.reset();
       if (stringFind && stringFind !== '') {
@@ -34,11 +33,14 @@ export class TextFindDirective implements OnInit, OnDestroy {
       }
     });
 
-
-    this.subscriptionFormReset = this.textFindService.formReset$.subscribe( resetForm => {
+    this.subscriptionFormReset = this.textFindService.formReset$.subscribe(resetForm => {
       if (resetForm) {
         this.reset();
       }
+    });
+
+    this.subscriptionSelectInstance = this.textFindService.selectMatchInstance$.subscribe(index => {
+      this.selectResultInstance(index);
     });
   }
 
@@ -47,7 +49,7 @@ export class TextFindDirective implements OnInit, OnDestroy {
     this.renderer.setProperty(
       this.elementRef.nativeElement, 'innerHTML', this.elementRef.nativeElement.innerHTML.replace(
         new RegExp(stringMatch, 'gim'), match => {
-          this.renderer.addClass(this.elementRef.nativeElement.parentNode.querySelector('span[apptextfind]'), 'selected');
+          this.renderer.addClass(this.elementRef.nativeElement.parentNode.querySelector('span[apptextfind]'), 'highlighted');
           return `<span class="highlightText">${match}</span>`;
         }
       ));
@@ -56,8 +58,15 @@ export class TextFindDirective implements OnInit, OnDestroy {
     this.updateResultIndexes();
   }
 
+  selectResultInstance(index: number) {
+    // const parentEl = this.renderer.selectRootElement('app-root', true).querySelectorAll('.highlighted');
+    console.log(`Received index ${index}`);
+    // this.renderer.addClass(this.elementRef.nativeElement.parentNode.querySelector('.highlighted'), 'selected');
+    // this.renderer.addClass(this.elementRef.nativeElement.parentNode.querySelector('.highlighted .highlightText'), 'selected');
+  }
+
   updateResultIndexes() {
-    const indexes = this.renderer.selectRootElement('app-root', true).querySelectorAll('.selected');
+    const indexes = this.renderer.selectRootElement('app-root', true).querySelectorAll('.highlighted');
 
     if (indexes && indexes.length > 0) {
       this.matchedIndexes = [];
@@ -67,7 +76,9 @@ export class TextFindDirective implements OnInit, OnDestroy {
     }
 
     const indexesToNumbers = [];
-    this.matchedIndexes.forEach(item => { indexesToNumbers.push([parseInt(item[0], 10), parseInt(item[1], 10), parseInt(item[2], 10) ]); });
+    this.matchedIndexes.forEach(item => {
+      indexesToNumbers.push([parseInt(item[0], 10), parseInt(item[1], 10), parseInt(item[2], 10) ]);
+    });
 
     this.textFindService.resultIndexes = indexesToNumbers;
   }
@@ -99,6 +110,6 @@ export class TextFindDirective implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.subscriptionFindString.unsubscribe();
     this.subscriptionFormReset.unsubscribe();
+    this.subscriptionSelectInstance.unsubscribe();
   }
-
 }

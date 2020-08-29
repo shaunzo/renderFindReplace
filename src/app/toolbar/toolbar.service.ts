@@ -14,7 +14,6 @@ export class ToolbarService implements OnDestroy {
   matchesFound: number;
   matchesCountUpdated$ = new Subject<number>();
   findString$ = new Subject<string>();
-  currentSelectionAll = this.textFindService.matchedIds;
 
   constructor( private textFindService: TextFindService) {
     this.subscriptionCountUpdated = this.textFindService.resultCountUpdated$.subscribe(
@@ -55,6 +54,10 @@ export class ToolbarService implements OnDestroy {
     this.textFindService.replaceText$.next(arr);
     formGroup.reset();
     this.textFindService.formReset$.next(true);
+  }
+
+  selectMatchInstance(index: number) {
+    this.textFindService.selectMatchInstance$.next(index);
   }
 
   ngOnDestroy() {
