@@ -26,7 +26,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     });
 
     this.findReplaceForm = new FormGroup({
-      find : new FormControl(null),
+      find : new FormControl(null, Validators.required),
       replace: new FormControl(null, Validators.required)
     });
 

@@ -1,6 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Subject, Subscription } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Subject, Subscription, Observable, throwError } from 'rxjs';
+import { retry, catchError } from 'rxjs/operators';
 import { IDocument } from '../interfaces/document';
 import { IUpdateText } from '../interfaces/update-text';
 import { TextFindService } from '../services/text-find.service';
@@ -31,8 +32,19 @@ export class DocumentService implements OnDestroy {
     });
   }
 
-  getDocument$() {
-    return this.httpClient.get('assets/data/public/Q1-sample-text.json');
+  // getDocument$() {
+  //   return this.httpClient.get('http://localhost:3001/documents');
+  // }
+
+  getDocument$(): Observable<any> {
+    return this.httpClient.get('http://localhost:3001/documents')
+    .pipe(
+      retry(1),
+      catchError(err => {
+        console.log('error fetching data: ' + err);
+        throw Error;
+       })
+    );
   }
 
   updateText(params: IUpdateText[]) {

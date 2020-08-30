@@ -14,7 +14,7 @@
     <form [formGroup]="findReplaceForm">
       <input type="text" id="find" formControlName="find" (input)="findText(findReplaceForm.value.find)" placeholder="Enter text to find" class="toolbar-find">
       <span>Replace with:</span>
-      <input type="text" id="replace" formControlName="replace" placeholder="Enter text to replace" class="toolbar-replace">
+      <input type="text" id="replace" formControlName="replace" [disabled]="!findReplaceForm.valid" placeholder="Enter text to replace" class="toolbar-replace">
       <button type="button" [disabled]="!findReplaceForm.valid" (click)="replaceAllText(findReplaceForm.value.find, findReplaceForm.value.replace, findReplaceForm)">Replace All</button>
       <button type="button" [disabled]="!findReplaceForm.valid" (click)="replaceSelectedText(findReplaceForm.value.find, findReplaceForm.value.replace, findReplaceForm)">Replace Selected</button>
     </form>

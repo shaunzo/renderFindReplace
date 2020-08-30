@@ -1,5 +1,10 @@
-<ng-container *ngIf="!document">
-  <p>Sorry there was a problem loading this document</p>
+<ng-container *ngIf="loading">
+  <!-- <p>Sorry there was a problem loading this document</p> -->
+  <app-loader></app-loader>
+</ng-container>
+
+<ng-container *ngIf="error">
+  <app-error [message]="'Sorry there was a problem loading this document'"></app-error>
 </ng-container>
 
 <ng-container *ngIf="document" >
