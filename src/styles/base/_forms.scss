@@ -1,8 +1,10 @@
 input {
-  border-color: $gray;
+  border-color: $primary;
   border-style: solid;
   border-width: 1px;
   height: 40px;
+  padding: 0 15px;
+  border-radius: 10px;
 
   &:active,
   &:focus {
@@ -16,6 +18,8 @@ button {
   background-color: $primary;
   border: none;
   color: #fff;
+  border-radius: 15px;
+  padding: 0 15px;
 
   &:active,
   &:focus {

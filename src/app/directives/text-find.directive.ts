@@ -15,6 +15,7 @@ import { debounceTime } from 'rxjs/operators';
 export class TextFindDirective implements OnInit, OnDestroy {
 
   matchedIndexes = [];
+  singleSelection = [];
   subscriptionFindString = new Subscription();
   subscriptionFormReset = new Subscription();
   subscriptionSelectInstance = new Subscription();
@@ -67,19 +68,27 @@ export class TextFindDirective implements OnInit, OnDestroy {
       this.renderer.removeClass(selected, 'selected');
     }
 
-    console.log(`Received index ${index}`);
-
     if (this.highlightedElements[index]) {
+      this.singleSelection = [];
       this.renderer.addClass(this.highlightedElements[index], 'selected');
+
+      const indexStrArr = this.renderer.parentNode(this.highlightedElements[index]).id.split('-');
+      this.singleSelection.push(parseInt(indexStrArr [0], 10), parseInt(indexStrArr [1], 10), parseInt(indexStrArr [2], 10));
+      this.textFindService.resultIndex = this.singleSelection;
     }
   }
 
   updateResultIndexes() {
+
     const indexes = this.renderer.selectRootElement('app-root', true).querySelectorAll('.highlighted');
     this.highlightedElements = this.renderer.selectRootElement('app-root', true).querySelectorAll('.highlightText');
 
     if (this.highlightedElements[0]) {
       this.renderer.addClass(this.highlightedElements[0], 'selected');
+
+      const indexStrArr = this.renderer.parentNode(this.highlightedElements[0]).id.split('-');
+      this.singleSelection.push(parseInt(indexStrArr [0], 10), parseInt(indexStrArr [1], 10), parseInt(indexStrArr [2], 10));
+      this.textFindService.resultIndex = this.singleSelection;
     }
 
     if (indexes && indexes.length > 0) {
@@ -98,6 +107,7 @@ export class TextFindDirective implements OnInit, OnDestroy {
   }
 
   reset() {
+    this.singleSelection = [];
     this.matchedIndexes = [];
     this.textFindService.resultsCount = null;
     this.textFindService.resultCountUpdated$.next(null);

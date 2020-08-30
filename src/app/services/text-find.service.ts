@@ -8,6 +8,7 @@ import { IUpdateText } from '../interfaces/update-text';
 export class TextFindService {
 
   resultIndexes = [];
+  resultIndex = [];
   resultsCount: number;
   matchedIds = [];
   replaceText$ = new Subject<IUpdateText[]>();
