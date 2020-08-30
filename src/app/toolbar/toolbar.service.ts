@@ -56,6 +56,10 @@ export class ToolbarService implements OnDestroy {
     this.textFindService.formReset$.next(true);
   }
 
+  replaceSelectedText(find: string, replace: string, formGroup: FormGroup) {
+    console.log('Replace!');
+  }
+
   selectMatchInstance(index: number) {
     this.textFindService.selectMatchInstance$.next(index);
   }

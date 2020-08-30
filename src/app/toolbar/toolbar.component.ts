@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ToolbarService } from './toolbar.service';
 import { Subscription } from 'rxjs';
 
@@ -27,7 +27,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
 
     this.findReplaceForm = new FormGroup({
       find : new FormControl(null),
-      replace: new FormControl(null)
+      replace: new FormControl(null, Validators.required)
     });
 
     this.matchesFound = this.toolbarService.matchesFound;
@@ -60,6 +60,10 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   replaceAllText(find: string, replace: string, formGroup: FormGroup) {
    this.toolbarService.replaceAllText(find, replace, formGroup);
   }
+
+  replaceSelectedText(find: string, replace: string, formGroup: FormGroup) {
+    this.toolbarService.replaceSelectedText(find, replace, formGroup);
+   }
 
   ngOnDestroy() {
     this.subscriptionMatchesCount.unsubscribe();
