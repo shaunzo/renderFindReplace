@@ -25,4 +25,8 @@ button {
   &:focus {
     outline: none;
   }
+
+  @media screen and (min-width: 1160px) {
+    font-size: 12px;
+  }
 }

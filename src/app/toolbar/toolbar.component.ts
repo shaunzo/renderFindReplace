@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ToolbarService } from './toolbar.service';
 import { Subscription } from 'rxjs';
+import { faSearch, faAngleRight, faAngleLeft, faFileWord } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-toolbar',
@@ -9,6 +10,10 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./toolbar.component.scss']
 })
 export class ToolbarComponent implements OnInit, OnDestroy {
+  faSearch = faSearch;
+  faAngleRight = faAngleRight;
+  faAngleLeft = faAngleLeft;
+  faFileWord = faFileWord;
 
   subscriptionMatchesCount = new Subscription();
   findReplaceForm: FormGroup;
