@@ -1,5 +1,18 @@
 # RenderFindReplace
 
+## To run this project:
+1. Ensure that you have a fairly recent version on NodeJS installed on your machine, if you don't install the appriate one for your system here:
+`https://nodejs.org/en/download/`
+2. Have the Angular cli installed, if you don't install it globally by running:
+`npm install -g @angular/cli` on your terminal
+3. Navigate to a folder on your machine and clone this repo if you haven't already: `git@github.com:shaunzo/renderFindReplace.git` with your terminal
+4. Using your terminal navigate to the project folder: `cd ./renderFindReplace`
+5. Install all depencies for the client application: `npm install` ( you may need to add sudo if on mac on linux if you get a user permission error `sudo npm install` )
+6. from the root folder, navigate into the server folder and install its dependencies:
+`cd ./server && npm install`
+7. While in the /server folder, spin up our Node server which serves the JSON file `npm start`
+8. Spin up the Angular app from project root folder `cd ../ng serve --o` or if you are already on teh project root directory just `ng serve --o`
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.0.0-rc.7.
 
 ## Development server
