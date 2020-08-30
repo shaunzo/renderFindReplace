@@ -40,7 +40,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   selectMatchNext() {
     if (this.selectionIncrement < this.matchesFound) {
       this.selectionIncrement++;
-      this.toolbarService.selectMatchInstance(this.selectionIncrement);
+      this.toolbarService.selectMatchInstance(this.selectionIncrement - 1);
     } else {
       return;
     }
@@ -50,7 +50,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     let index = null;
     if (this.selectionIncrement > 1) {
       this.selectionIncrement--;
-      this.selectionIncrement === 1 ? index = this.selectionIncrement : index = this.selectionIncrement - 1;
+      this.selectionIncrement === 0 ? index = this.selectionIncrement : index = this.selectionIncrement - 1;
       this.toolbarService.selectMatchInstance(index);
     } else {
       return;

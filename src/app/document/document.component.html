@@ -13,7 +13,7 @@
             'font-italic': content.attrs.italic || content.attrs.textCSS && content.attrs.textCSS.fontStyle === 'italic' || false,
             'primary-font-family': content.attrs.font === 'Times New Roman' || content.attrs && content.attrs.textCSS && content.attrs.textCSS.fontFamily === 'Times New Roman' || false,
             'text-underline': content.attrs.textCSS && content.attrs.textCSS.textDecoration && content.attrs.textCSS.textDecoration === 'underline' || false,
-            'text-decoration-solid': content.attrs.textCSS && content.attrs.textCSS.textdecorationStyle && content.attrs.textCSS.textDecorationStyle === 'solid' || false }">
+            'text-decoration-solid': content.attrs.textCSS && content.attrs.textCSS.textDecorationStyle && content.attrs.textCSS.textDecorationStyle === 'solid' || false }">
             <ng-container *ngFor="let item of content.content; let contentIndex = index">
               <span appTextFind [id]="pIndex +'-'+ spanIndex +'-' + contentIndex">{{ item.text }}</span>
             </ng-container>

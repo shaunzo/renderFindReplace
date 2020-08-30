@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { TextFindService } from '../services/text-find.service';
 import { Subscription } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 @Directive({
   selector: '[appTextFind]',
@@ -17,6 +18,7 @@ export class TextFindDirective implements OnInit, OnDestroy {
   subscriptionFindString = new Subscription();
   subscriptionFormReset = new Subscription();
   subscriptionSelectInstance = new Subscription();
+  highlightedElements: any[];
 
   constructor(
     private elementRef: ElementRef,
@@ -24,7 +26,7 @@ export class TextFindDirective implements OnInit, OnDestroy {
     private textFindService: TextFindService) {}
 
   ngOnInit() {
-    this.subscriptionFindString = this.textFindService.findString$.subscribe(stringFind => {
+    this.subscriptionFindString = this.textFindService.findString$.pipe(debounceTime(500)).subscribe(stringFind => {
       this.reset();
       if (stringFind && stringFind !== '') {
         this.makeSelection(stringFind);
@@ -59,14 +61,26 @@ export class TextFindDirective implements OnInit, OnDestroy {
   }
 
   selectResultInstance(index: number) {
-    // const parentEl = this.renderer.selectRootElement('app-root', true).querySelectorAll('.highlighted');
+    const selected = this.renderer.selectRootElement('app-root', true).querySelectorAll('.highlightText.selected')[0];
+
+    if (selected) {
+      this.renderer.removeClass(selected, 'selected');
+    }
+
     console.log(`Received index ${index}`);
-    // this.renderer.addClass(this.elementRef.nativeElement.parentNode.querySelector('.highlighted'), 'selected');
-    // this.renderer.addClass(this.elementRef.nativeElement.parentNode.querySelector('.highlighted .highlightText'), 'selected');
+
+    if (this.highlightedElements[index]) {
+      this.renderer.addClass(this.highlightedElements[index], 'selected');
+    }
   }
 
   updateResultIndexes() {
     const indexes = this.renderer.selectRootElement('app-root', true).querySelectorAll('.highlighted');
+    this.highlightedElements = this.renderer.selectRootElement('app-root', true).querySelectorAll('.highlightText');
+
+    if (this.highlightedElements[0]) {
+      this.renderer.addClass(this.highlightedElements[0], 'selected');
+    }
 
     if (indexes && indexes.length > 0) {
       this.matchedIndexes = [];
@@ -89,7 +103,7 @@ export class TextFindDirective implements OnInit, OnDestroy {
     this.textFindService.resultCountUpdated$.next(null);
     this.renderer.setProperty(
       this.elementRef.nativeElement, 'innerHTML', this.elementRef.nativeElement.innerHTML.replace(
-        new RegExp(`<span class="highlightText">|</span>`, 'g'), match => {
+        new RegExp(`<span class="highlightText">|</span>|<span class="highlightText selected">`, 'g'), match => {
           return '';
         }
     ));
