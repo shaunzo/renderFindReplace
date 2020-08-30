@@ -1,21 +1,24 @@
-<div class="logo"></div>
+<div class="toolbar-item logo"></div>
 
 <div class="fill-space"></div>
 
-<ng-container *ngIf="matchesFound > 0">
-  <div class="matchResults-nav">
-    <button class="nav-prev" (click)="selectMatchPrev()">Prev</button>
-    <span>{{selectionIncrement}} of {{matchesFound}} results</span>
-    <button class="nav-next" (click)="selectMatchNext()">Next</button>
-  </div>
-</ng-container>
+<div class="toolbar-item">
+  <ng-container *ngIf="matchesFound > 0">
+    <div class="matchResults-nav">
+      <button class="nav-prev" (click)="selectMatchPrev()">Prev</button>
+      <span>{{selectionIncrement}} of {{matchesFound}} results</span>
+      <button class="nav-next" (click)="selectMatchNext()">Next</button>
+    </div>
+  </ng-container>
 
-<div class="findReplaceForm">
-    <form [formGroup]="findReplaceForm">
-      <input type="text" id="find" formControlName="find" (input)="findText(findReplaceForm.value.find)" placeholder="Enter text to find" class="toolbar-find">
-      <span>Replace with:</span>
-      <input type="text" id="replace" formControlName="replace" [disabled]="!findReplaceForm.valid" placeholder="Enter text to replace" class="toolbar-replace">
-      <button type="button" [disabled]="!findReplaceForm.valid" (click)="replaceAllText(findReplaceForm.value.find, findReplaceForm.value.replace, findReplaceForm)">Replace All</button>
-      <button type="button" [disabled]="!findReplaceForm.valid" (click)="replaceSelectedText(findReplaceForm.value.find, findReplaceForm.value.replace, findReplaceForm)">Replace Selected</button>
-    </form>
+  <div class="findReplaceForm">
+      <form [formGroup]="findReplaceForm">
+        <input type="text" id="find" formControlName="find" (input)="findText(findReplaceForm.value.find)" placeholder="Enter text to find" class="findReplaceForm-item toolbar-find">
+        <span class="findReplaceForm-item">Replace with:</span>
+        <input type="text" id="replace" formControlName="replace" [disabled]="!findReplaceForm.valid" placeholder="Enter text to replace" class="findReplaceForm-item toolbar-replace">
+        <button class="findReplaceForm-item" type="button" [disabled]="!findReplaceForm.valid" (click)="replaceAllText(findReplaceForm.value.find, findReplaceForm.value.replace, findReplaceForm)">Replace All</button>
+        <button class="findReplaceForm-item" type="button" [disabled]="!findReplaceForm.valid" (click)="replaceSelectedText(findReplaceForm.value.find, findReplaceForm.value.replace, findReplaceForm)">Replace Selected</button>
+      </form>
+  </div>
 </div>
+
