@@ -52,8 +52,6 @@ export class DocumentService implements OnDestroy {
       const replacement = textToUpdate.replace(new RegExp(item.textMatch, 'gim'), item.textReplace);
       updatedDocument.content[item.pIndex].content[item.spanIndex].content[item.contentIndex].text = replacement;
     });
-
-    console.log(updatedDocument);
     this.documentUpdated$.next(updatedDocument);
   }
 

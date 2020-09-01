@@ -30,7 +30,7 @@ export class DocumentComponent implements OnInit, OnDestroy {
     this.document = this.documentService.document;
     this.findString = this.documentService.findString;
 
-    this.subscriptionUpatedDocument = this.documentService.documentUpdated$.pipe(debounceTime(500)).subscribe(
+    this.subscriptionUpatedDocument = this.documentService.documentUpdated$.subscribe(
       (res) => {
         this.document = JSON.parse(JSON.stringify(res));
         this.loading = false;
@@ -41,10 +41,9 @@ export class DocumentComponent implements OnInit, OnDestroy {
   getDocument() {
     this.documentService.getDocument$().subscribe(
       (res: IDocument) => {
-          this.document = res;
+          this.documentService.documentUpdated$.next(res);
           this.loading = false;
           this.error = false;
-          this.documentService.documentUpdated$.next(this.document);
       },
       (error) => {
         this.loading = false;

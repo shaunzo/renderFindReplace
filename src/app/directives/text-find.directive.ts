@@ -6,7 +6,6 @@ import {
   Renderer2,
 } from '@angular/core';
 import { TextFindService } from '../services/text-find.service';
-import { DocumentService } from '../document/document.service';
 import { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
@@ -26,8 +25,7 @@ export class TextFindDirective implements OnInit, OnDestroy {
   constructor(
     private elementRef: ElementRef,
     private renderer: Renderer2,
-    private textFindService: TextFindService,
-    private documentService: DocumentService) {
+    private textFindService: TextFindService) {
     }
 
   ngOnInit() {
@@ -47,27 +45,15 @@ export class TextFindDirective implements OnInit, OnDestroy {
       }
     });
 
-    // this.documentService.documentUpdated$.pipe(debounceTime(500)).subscribe(() => {
-    //   this.reset();
-    // });
-
     this.subscriptionSelectInstance = this.textFindService.selectMatchInstance$.subscribe(index => {
       this.selectResultInstance(index);
     });
   }
 
   makeSelection(stringMatch: string) {
-    const regex = `(?<!<[^>]*)${stringMatch}`;
-
-    this.documentHTML = this.renderer.selectRootElement('[appTextFind]', true).innerHTML;
+    const regex = `(?<!<[^>]*)\s?${stringMatch}`;
 
     this.reset();
-
-    const document = this.renderer.selectRootElement('app-document', true);
-    const documentStr = JSON.stringify(document.innerHTML);
-    const updatedDocument = documentStr.replace( new RegExp(regex, 'gim'), match => {
-      return `<span class="highlightText">${match}</span>`;
-    });
 
     this.renderer.setProperty(
       this.elementRef.nativeElement, 'innerHTML', this.elementRef.nativeElement.innerHTML.replace(
@@ -78,7 +64,6 @@ export class TextFindDirective implements OnInit, OnDestroy {
     );
 
     const elementsArr = document.querySelectorAll('.highlightText');
-    const currentElementIndex = this.getResultsCount() - 1;
 
     elementsArr.forEach(element => {
       this.renderer.addClass(element.parentElement, 'highlighted');
@@ -131,6 +116,7 @@ export class TextFindDirective implements OnInit, OnDestroy {
     });
 
     this.textFindService.resultIndexes = indexesToNumbers;
+    console.log(this.textFindService.resultIndexes);
   }
 
   reset() {
