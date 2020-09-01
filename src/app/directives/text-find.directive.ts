@@ -6,6 +6,7 @@ import {
   Renderer2,
 } from '@angular/core';
 import { TextFindService } from '../services/text-find.service';
+import { DocumentService } from '../document/document.service';
 import { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
@@ -25,7 +26,8 @@ export class TextFindDirective implements OnInit, OnDestroy {
   constructor(
     private elementRef: ElementRef,
     private renderer: Renderer2,
-    private textFindService: TextFindService) {
+    private textFindService: TextFindService,
+    private documentService: DocumentService) {
     }
 
   ngOnInit() {
@@ -45,6 +47,10 @@ export class TextFindDirective implements OnInit, OnDestroy {
       }
     });
 
+    // this.documentService.documentUpdated$.pipe(debounceTime(500)).subscribe(() => {
+    //   this.reset();
+    // });
+
     this.subscriptionSelectInstance = this.textFindService.selectMatchInstance$.subscribe(index => {
       this.selectResultInstance(index);
     });
@@ -54,7 +60,6 @@ export class TextFindDirective implements OnInit, OnDestroy {
     const regex = `(?<!<[^>]*)${stringMatch}`;
 
     this.documentHTML = this.renderer.selectRootElement('[appTextFind]', true).innerHTML;
-    console.log('html', this.documentHTML);
 
     this.reset();
 
@@ -129,30 +134,23 @@ export class TextFindDirective implements OnInit, OnDestroy {
   }
 
   reset() {
+
     this.singleSelection = [];
     this.matchedIndexes = [];
     this.textFindService.resultsCount = null;
     this.textFindService.resultCountUpdated$.next(null);
 
-    /**
-     * Fix is here
-     */
-    // this.renderer.setProperty(this.elementRef.nativeElement.querySelector('[appTextFind]'), 'innerHTML', this.documentHTML);
-    // this.renderer.setProperty(
-    //   this.elementRef.nativeElement, 'innerHTML', this.elementRef.nativeElement.innerHTML.replace(
-    //     new RegExp(`<span class="highlightText">|</span>|<span class="highlightText selected">`, 'g'), match => {
-    //       return '';
-    //     }
-    // ));
+    const wordRegex = /(?<openSpan><span class="highlightText">|<span class="highlightText selected">)(?<word>\w+)(?<closeSpan><\/span>)/gi;
+    this.renderer.setProperty(
+      this.elementRef.nativeElement, 'innerHTML', this.elementRef.nativeElement.innerHTML.replace(wordRegex, '$<word>')
+     );
 
-    // const highlightElements = this.renderer.selectRootElement('app-document').nativeElement.querySelectorAll('.doc-text.highlighted');
-    // console.log(highlightElements);
-    // // highlightElements.forEach(element => {
-    // //   this.renderer.removeClass(element, '.highlighted');
-    // // });
+    this.renderer.setProperty(
+      this.elementRef.nativeElement, 'innerHTML', this.elementRef.nativeElement.innerHTML
+      .replace('class="doc-text highlighted"', 'class="doc-text"')
+    );
 
     this.textFindService.resultIndexes = [];
-    // this.renderer.removeClass(this.elementRef.nativeElement.parentNode.querySelector('span[apptextfind]'), 'selected');
   }
 
   getResultsCount() {

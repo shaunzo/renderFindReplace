@@ -33,9 +33,6 @@ export class DocumentService implements OnDestroy {
     });
   }
 
-  // getDocument$() {
-  //   return this.httpClient.get('http://localhost:3001/documents');
-  // }
 
   getDocument$(): Observable<any> {
     return this.httpClient.get('http://localhost:3001/documents')
