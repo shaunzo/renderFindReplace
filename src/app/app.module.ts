@@ -33,6 +33,9 @@ import { ErrorComponent } from './error/error.component';
     ToolbarService
   ],
   bootstrap: [AppComponent],
-  exports: [TextFindDirective, FontAwesomeModule ]
+  exports: [
+    TextFindDirective,
+    FontAwesomeModule
+  ]
 })
 export class AppModule { }

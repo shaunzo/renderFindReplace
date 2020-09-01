@@ -1,6 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { Subscription } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 import { TextFindService } from '../services/text-find.service';
 import { IUpdateText } from '../interfaces/update-text';
 import { FormGroup, FormControl } from '@angular/forms';
@@ -14,12 +15,14 @@ export class ToolbarService implements OnDestroy {
   matchesFound: number;
   matchesCountUpdated$ = new Subject<number>();
   findString$ = new Subject<string>();
+  calculatingResults = false;
 
   constructor( private textFindService: TextFindService) {
-    this.subscriptionCountUpdated = this.textFindService.resultCountUpdated$.subscribe(
+    this.subscriptionCountUpdated = this.textFindService.resultCountUpdated$.pipe(debounceTime(1000)).subscribe(
       count => {
 
         if (count) {
+          this.calculatingResults = false;
           this.matchesFound = count;
           this.matchesCountUpdated$.next(count);
         } else {

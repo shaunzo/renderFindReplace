@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ToolbarService } from './toolbar.service';
 import { Subscription } from 'rxjs';
 import { faSearch, faAngleRight, faAngleLeft, faFileWord } from '@fortawesome/free-solid-svg-icons';
+import { LoaderComponent } from '../loader/loader.component';
 
 @Component({
   selector: 'app-toolbar',
@@ -20,12 +21,16 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   matchesFound: number;
   findString: string;
   selectionIncrement = 1;
+  calculatingResults: boolean;
 
-  constructor(private toolbarService: ToolbarService) { }
+  constructor(private toolbarService: ToolbarService) {
+    this.calculatingResults = this.toolbarService.calculatingResults;
+  }
 
   ngOnInit(): void {
 
     this.subscriptionMatchesCount = this.toolbarService.matchesCountUpdated$.subscribe(count => {
+      this.calculatingResults = this.toolbarService.calculatingResults;
       this.matchesFound = count;
       this.selectionIncrement = 1;
     });
@@ -39,6 +44,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   }
 
   findText(text: string) {
+    this.calculatingResults = true;
     this.toolbarService.findText(text);
   }
 

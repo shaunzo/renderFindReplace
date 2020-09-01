@@ -3,7 +3,14 @@
 <div class="fill-space"></div>
 
 <div class="toolbar-item">
-  <ng-container *ngIf="matchesFound > 0">
+
+  <ng-container *ngIf="calculatingResults">
+    <span class="toolbar-item-loader">
+      <app-loader></app-loader></span>&nbsp;
+      <span class="primary-text">Processing results...</span>
+  </ng-container>
+
+  <ng-container *ngIf="matchesFound > 0 && !calculatingResults ">
     <div class="matchResults-nav">
       <span *ngIf="selectionIncrement > 1" class="nav-prev" (click)="selectMatchPrev()"><fa-icon class="primary-text searchIcon" [icon]="faAngleLeft" size="lg"></fa-icon> &nbsp;</span>
       <span>{{selectionIncrement}} of {{matchesFound}} results</span>
