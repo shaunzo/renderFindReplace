@@ -38,7 +38,6 @@ export class ToolbarService implements OnDestroy {
 
     if (this.textFindService.resultIndexes.length > 0) {
       this.textFindService.resultIndexes.forEach(item => {
-
         const updateItem: IUpdateText = {
            pIndex: item[0],
            spanIndex: item[1],

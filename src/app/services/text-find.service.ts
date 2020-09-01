@@ -17,6 +17,7 @@ export class TextFindService {
   resultCountUpdated$ = new Subject<number>();
   formReset$ = new Subject<boolean>();
   selectMatchInstance$ = new Subject<number>();
+  document: any;
 
   constructor() {
   }

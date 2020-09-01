@@ -63,7 +63,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   }
 
   replaceAllText(find: string, replace: string, formGroup: FormGroup) {
-   this.toolbarService.replaceAllText(find, replace, formGroup);
+    this.toolbarService.replaceAllText(find, replace, formGroup);
   }
 
   replaceSelectedText(find: string, replace: string, formGroup: FormGroup) {

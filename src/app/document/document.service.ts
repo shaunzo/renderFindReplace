@@ -21,6 +21,7 @@ export class DocumentService implements OnDestroy {
 
     this.subscriptionUpatedDocument = this.documentUpdated$.subscribe( (document) => {
       this.document = JSON.parse(JSON.stringify(document));
+      this.textFindService.document = this.document;
     });
 
     this.subscriptionFindString = this.textFindService.findString$.subscribe( stringToFind => {
@@ -55,6 +56,7 @@ export class DocumentService implements OnDestroy {
       updatedDocument.content[item.pIndex].content[item.spanIndex].content[item.contentIndex].text = replacement;
     });
 
+    console.log(updatedDocument);
     this.documentUpdated$.next(updatedDocument);
   }
 

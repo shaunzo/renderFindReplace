@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DocumentService } from './document.service';
 import { IDocument, IContent } from '../interfaces/document';
 import { Subscription } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 import { IUpdateText } from '../interfaces/update-text';
 import { LoaderComponent } from '../loader/loader.component';
 import { ErrorComponent } from '../error/error.component';
@@ -29,7 +30,7 @@ export class DocumentComponent implements OnInit, OnDestroy {
     this.document = this.documentService.document;
     this.findString = this.documentService.findString;
 
-    this.subscriptionUpatedDocument = this.documentService.documentUpdated$.subscribe(
+    this.subscriptionUpatedDocument = this.documentService.documentUpdated$.pipe(debounceTime(500)).subscribe(
       (res) => {
         this.document = JSON.parse(JSON.stringify(res));
         this.loading = false;

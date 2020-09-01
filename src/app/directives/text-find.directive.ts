@@ -20,13 +20,16 @@ export class TextFindDirective implements OnInit, OnDestroy {
   subscriptionFormReset = new Subscription();
   subscriptionSelectInstance = new Subscription();
   highlightedElements: any[];
+  documentHTML: any;
 
   constructor(
     private elementRef: ElementRef,
     private renderer: Renderer2,
-    private textFindService: TextFindService) {}
+    private textFindService: TextFindService) {
+    }
 
   ngOnInit() {
+
     this.subscriptionFindString = this.textFindService.findString$.pipe(debounceTime(500)).subscribe(stringFind => {
       this.reset();
       if (stringFind && stringFind !== '') {
@@ -48,14 +51,34 @@ export class TextFindDirective implements OnInit, OnDestroy {
   }
 
   makeSelection(stringMatch: string) {
+    const regex = `(?<!<[^>]*)${stringMatch}`;
+
+    this.documentHTML = this.renderer.selectRootElement('[appTextFind]', true).innerHTML;
+    console.log('html', this.documentHTML);
+
     this.reset();
+
+    const document = this.renderer.selectRootElement('app-document', true);
+    const documentStr = JSON.stringify(document.innerHTML);
+    const updatedDocument = documentStr.replace( new RegExp(regex, 'gim'), match => {
+      return `<span class="highlightText">${match}</span>`;
+    });
+
     this.renderer.setProperty(
       this.elementRef.nativeElement, 'innerHTML', this.elementRef.nativeElement.innerHTML.replace(
-        new RegExp(stringMatch, 'gim'), match => {
-          this.renderer.addClass(this.elementRef.nativeElement.parentNode.querySelector('span[apptextfind]'), 'highlighted');
+        new RegExp(regex, 'gim'), match => {
           return `<span class="highlightText">${match}</span>`;
         }
-      ));
+      )
+    );
+
+    const elementsArr = document.querySelectorAll('.highlightText');
+    const currentElementIndex = this.getResultsCount() - 1;
+
+    elementsArr.forEach(element => {
+      this.renderer.addClass(element.parentElement, 'highlighted');
+    });
+
     this.textFindService.resultsCount = this.getResultsCount();
     this.textFindService.resultCountUpdated$.next(this.textFindService.resultsCount);
     this.updateResultIndexes();
@@ -79,7 +102,6 @@ export class TextFindDirective implements OnInit, OnDestroy {
   }
 
   updateResultIndexes() {
-
     const indexes = this.renderer.selectRootElement('app-root', true).querySelectorAll('.highlighted');
     this.highlightedElements = this.renderer.selectRootElement('app-root', true).querySelectorAll('.highlightText');
 
@@ -111,14 +133,26 @@ export class TextFindDirective implements OnInit, OnDestroy {
     this.matchedIndexes = [];
     this.textFindService.resultsCount = null;
     this.textFindService.resultCountUpdated$.next(null);
-    this.renderer.setProperty(
-      this.elementRef.nativeElement, 'innerHTML', this.elementRef.nativeElement.innerHTML.replace(
-        new RegExp(`<span class="highlightText">|</span>|<span class="highlightText selected">`, 'g'), match => {
-          return '';
-        }
-    ));
+
+    /**
+     * Fix is here
+     */
+    // this.renderer.setProperty(this.elementRef.nativeElement.querySelector('[appTextFind]'), 'innerHTML', this.documentHTML);
+    // this.renderer.setProperty(
+    //   this.elementRef.nativeElement, 'innerHTML', this.elementRef.nativeElement.innerHTML.replace(
+    //     new RegExp(`<span class="highlightText">|</span>|<span class="highlightText selected">`, 'g'), match => {
+    //       return '';
+    //     }
+    // ));
+
+    // const highlightElements = this.renderer.selectRootElement('app-document').nativeElement.querySelectorAll('.doc-text.highlighted');
+    // console.log(highlightElements);
+    // // highlightElements.forEach(element => {
+    // //   this.renderer.removeClass(element, '.highlighted');
+    // // });
+
     this.textFindService.resultIndexes = [];
-    this.renderer.removeClass(this.elementRef.nativeElement.parentNode.querySelector('span[apptextfind]'), 'selected');
+    // this.renderer.removeClass(this.elementRef.nativeElement.parentNode.querySelector('span[apptextfind]'), 'selected');
   }
 
   getResultsCount() {
@@ -130,6 +164,7 @@ export class TextFindDirective implements OnInit, OnDestroy {
       return null;
     }
   }
+
 
   ngOnDestroy() {
     this.subscriptionFindString.unsubscribe();
