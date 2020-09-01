@@ -71,7 +71,7 @@ export class TextFindDirective implements OnInit, OnDestroy {
 
     this.textFindService.resultsCount = this.getResultsCount();
     this.textFindService.resultCountUpdated$.next(this.textFindService.resultsCount);
-    // this.updateResultIndexes();
+    this.updateResultIndexes();
   }
 
   selectResultInstance(index: number) {
@@ -93,7 +93,6 @@ export class TextFindDirective implements OnInit, OnDestroy {
 
   updateResultIndexes() {
     const indexes = this.renderer.selectRootElement('app-root', true).querySelectorAll('.highlighted');
-    console.log(indexes);
     this.highlightedElements = this.renderer.selectRootElement('app-root', true).querySelectorAll('.highlightText');
 
     if (this.highlightedElements[0]) {

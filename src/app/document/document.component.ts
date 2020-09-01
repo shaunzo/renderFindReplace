@@ -53,7 +53,7 @@ export class DocumentComponent implements OnInit, OnDestroy {
   }
 
   updateText(params: IUpdateText[]) {
-    this.documentService.updateText(params);
+    console.log('Make call to API endpoint to update document:', params);
     /**
      * Call to update record on API will go here
      */
