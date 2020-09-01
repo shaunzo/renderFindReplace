@@ -104,15 +104,14 @@ export class TextFindDirective implements OnInit, OnDestroy {
     }
 
     if (indexes && indexes.length > 0) {
-      this.matchedIndexes = [];
-      indexes.forEach(item => {
-        this.matchedIndexes.push(item.id.split('-'));
+      const indexesArr = Array.from(indexes);
+      this.matchedIndexes = indexesArr.map((item: any) => {
+        return item.id.split('-');
       });
     }
 
-    const indexesToNumbers = [];
-    this.matchedIndexes.forEach(item => {
-      indexesToNumbers.push([parseInt(item[0], 10), parseInt(item[1], 10), parseInt(item[2], 10) ]);
+    const indexesToNumbers = this.matchedIndexes.map((item: any) => {
+      return [parseInt(item[0], 10), parseInt(item[1], 10), parseInt(item[2], 10)];
     });
 
     this.textFindService.resultIndexes = indexesToNumbers;
