@@ -4,7 +4,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { DocumentComponent } from './document.component';
 
-fdescribe('DocumentComponent', () => {
+describe('DocumentComponent', () => {
   let component: DocumentComponent;
   let fixture: ComponentFixture<DocumentComponent>;
 

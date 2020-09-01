@@ -27,7 +27,7 @@ export class TextFindDirective implements OnInit, OnDestroy {
     private textFindService: TextFindService) {}
 
   ngOnInit() {
-    this.subscriptionFindString = this.textFindService.findString$.pipe(debounceTime(500)).subscribe(stringFind => {
+    this.subscriptionFindString = this.textFindService.findString().pipe(debounceTime(500)).subscribe(stringFind => {
       this.reset();
       if (stringFind && stringFind !== '') {
         this.makeSelection(stringFind);

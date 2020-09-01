@@ -4,6 +4,10 @@ import { DocumentComponent } from './document/document.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { HttpClient } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { TextFindDirective } from './directives/text-find.directive';
+import { LoaderComponent } from './loader/loader.component';
+import { ErrorComponent } from './error/error.component';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
@@ -14,8 +18,12 @@ describe('AppComponent', () => {
       declarations: [
         AppComponent,
         DocumentComponent,
-        ToolbarComponent
+        ToolbarComponent,
+        TextFindDirective,
+        LoaderComponent,
+        ErrorComponent
       ],
+      schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
     }).compileComponents();
   }));
 

@@ -20,4 +20,8 @@ export class TextFindService {
 
   constructor() {
   }
+
+  findString() {
+    return this.findString$;
+  }
 }
