@@ -51,7 +51,7 @@ export class TextFindDirective implements OnInit, OnDestroy {
   }
 
   makeSelection(stringMatch: string) {
-    const regex = `(?<!<[^>]*)\s?${stringMatch}`;
+    const regex = `(?<!<[^>]*)${stringMatch}`;
 
     this.reset();
 
