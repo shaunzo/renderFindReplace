@@ -63,18 +63,13 @@ export class TextFindDirective implements OnInit, OnDestroy {
       )
     );
 
-    const elementsArr = document.querySelectorAll('.highlightText');
-
-    elementsArr.forEach(element => {
-      this.renderer.addClass(element.parentElement, 'highlighted');
-    });
-
     this.textFindService.resultsCount = this.getResultsCount();
     this.textFindService.resultCountUpdated$.next(this.textFindService.resultsCount);
     this.updateResultIndexes();
   }
 
   selectResultInstance(index: number) {
+
     const selected = this.renderer.selectRootElement('app-root', true).querySelectorAll('.highlightText.selected')[0];
 
     if (selected) {
@@ -92,12 +87,26 @@ export class TextFindDirective implements OnInit, OnDestroy {
   }
 
   updateResultIndexes() {
+
     const indexes = this.renderer.selectRootElement('app-root', true).querySelectorAll('.highlighted');
+
     this.highlightedElements = this.renderer.selectRootElement('app-root', true).querySelectorAll('.highlightText');
+
+    const parentElements = Array.from(this.renderer.selectRootElement('app-root', true).querySelectorAll('.doc-text')).map(
+      (item: any) => {
+      if (item.children[0] && item.children[0].classList[0] === 'highlightText') {
+        return item.id;
+      }
+    }).filter(item => {
+      return item !== undefined;
+    });
+
+    parentElements.forEach(id => {
+      this.renderer.addClass(this.renderer.selectRootElement(document).getElementById(id), 'highlighted');
+    });
 
     if (this.highlightedElements[0]) {
       this.renderer.addClass(this.highlightedElements[0], 'selected');
-
       const indexStrArr = this.renderer.parentNode(this.highlightedElements[0]).id.split('-');
       this.singleSelection.push(parseInt(indexStrArr [0], 10), parseInt(indexStrArr [1], 10), parseInt(indexStrArr [2], 10));
       this.textFindService.resultIndex = this.singleSelection;
