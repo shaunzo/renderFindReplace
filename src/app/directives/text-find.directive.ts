@@ -133,7 +133,8 @@ export class TextFindDirective implements OnInit, OnDestroy {
     this.textFindService.resultsCount = null;
     this.textFindService.resultCountUpdated$.next(null);
 
-    const wordRegex = /(?<openSpan><span class="highlightText">|<span class="highlightText selected">)(?<word>\w+)(?<closeSpan><\/span>)/gi;
+    const wordRegex =
+    /(?<openSpan><span class="highlightText">|<span class="highlightText selected">)(?<word>\w+|\s)(?<closeSpan><\/span>)/gim;
     this.renderer.setProperty(
       this.elementRef.nativeElement, 'innerHTML', this.elementRef.nativeElement.innerHTML.replace(wordRegex, '$<word>')
      );
