@@ -5,6 +5,7 @@ import { retry, catchError } from 'rxjs/operators';
 import { IDocument } from '../interfaces/document';
 import { IUpdateText } from '../interfaces/update-text';
 import { TextFindService } from '../services/text-find.service';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -12,24 +13,22 @@ export class DocumentService implements OnDestroy {
 
   subscriptionFindString = new Subscription();
   subscriptionReplaceText = new Subscription();
-  subscriptionUpatedDocument = new Subscription();
-  documentUpdated$ = new Subject<IDocument>();
+  subscriptionFetchDocument = new Subscription();
+  documentUpdated$ = new Subject<any>();
+  documentfetched$ = new Subject<any>();
+  textReplaced$ = new Subject<any>();
   findString: string;
   document: IDocument;
 
   constructor(private httpClient: HttpClient, private textFindService: TextFindService) {
 
-    this.subscriptionUpatedDocument = this.documentUpdated$.subscribe( (document) => {
+    this.subscriptionFetchDocument = this.documentfetched$.subscribe( (document) => {
       this.document = JSON.parse(JSON.stringify(document));
       this.textFindService.document = this.document;
     });
 
     this.subscriptionFindString = this.textFindService.findString$.subscribe( stringToFind => {
       this.findString = stringToFind;
-    });
-
-    this.subscriptionReplaceText = this.textFindService.replaceText$.subscribe( (data: IUpdateText[]) => {
-      this.updateText(data);
     });
   }
 
@@ -52,12 +51,11 @@ export class DocumentService implements OnDestroy {
       const replacement = textToUpdate.replace(new RegExp(item.textMatch, 'gim'), item.textReplace);
       updatedDocument.content[item.pIndex].content[item.spanIndex].content[item.contentIndex].text = replacement;
     });
+
     this.documentUpdated$.next(updatedDocument);
+    this.document = {...updatedDocument };
   }
 
   ngOnDestroy() {
-    this.subscriptionFindString.unsubscribe();
-    this.subscriptionReplaceText.unsubscribe();
-    this.subscriptionUpatedDocument.unsubscribe();
   }
 }
