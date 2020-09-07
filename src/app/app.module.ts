@@ -9,7 +9,6 @@ import { DocumentComponent } from './document/document.component';
 import { DocumentService } from './document/document.service';
 import { ToolbarService } from './toolbar/toolbar.service';
 import { ToolbarComponent } from './toolbar/toolbar.component';
-import { TextFindDirective } from './directives/text-find.directive';
 import { LoaderComponent } from './loader/loader.component';
 import { ErrorComponent } from './error/error.component';
 
@@ -18,7 +17,6 @@ import { ErrorComponent } from './error/error.component';
     AppComponent,
     DocumentComponent,
     ToolbarComponent,
-    TextFindDirective,
     LoaderComponent,
     ErrorComponent
   ],
@@ -34,7 +32,6 @@ import { ErrorComponent } from './error/error.component';
   ],
   bootstrap: [AppComponent],
   exports: [
-    TextFindDirective,
     FontAwesomeModule
   ]
 })

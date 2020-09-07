@@ -5,6 +5,7 @@ import { debounceTime } from 'rxjs/operators';
 import { TextFindService } from '../services/text-find.service';
 import { IUpdateText } from '../interfaces/update-text';
 import { FormGroup, FormControl } from '@angular/forms';
+import { DocumentService } from '../document/document.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class ToolbarService implements OnDestroy {
   findString$ = new Subject<string>();
   calculatingResults = false;
 
-  constructor( private textFindService: TextFindService) {
+  constructor( private textFindService: TextFindService, private documentService: DocumentService) {
     this.subscriptionCountUpdated = this.textFindService.resultCountUpdated$.pipe(debounceTime(1000)).subscribe(
       count => {
 
@@ -66,11 +67,13 @@ export class ToolbarService implements OnDestroy {
       spanIndex: this.textFindService.resultIndex[1],
       contentIndex: this.textFindService.resultIndex[2],
       textMatch: find,
-      textReplace: replace
+      textReplace: replace,
+      onlySelected: true
     };
 
     arr.push(updateItem);
 
+    // this.documentService.documentUpdated$.next(arr);
     this.textFindService.replaceText$.next(arr);
     formGroup.reset();
     this.textFindService.formReset$.next(true);

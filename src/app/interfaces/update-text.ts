@@ -4,4 +4,5 @@ export interface IUpdateText {
   contentIndex: number;
   textMatch: string;
   textReplace: string;
+  onlySelected?: boolean;
 }
